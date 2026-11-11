@@ -1,0 +1,773 @@
+/* =========================================================
+   HAKY TECH - CHECKOUT
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f4f7fb;
+    color: #172033;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ================================
+   CHECKOUT PAGE
+================================ */
+
+.checkout-page {
+    min-height: 700px;
+    padding: 45px 20px 70px;
+}
+
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* ================================
+   TITLE
+================================ */
+
+.checkout-title {
+    margin-bottom: 30px;
+}
+
+.checkout-title h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 800;
+    color: #0d1526;
+}
+
+.checkout-title p {
+    margin: 0;
+    color: #64748b;
+    font-size: 15px;
+}
+
+
+/* ================================
+   LAYOUT
+================================ */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 25px;
+    align-items: start;
+}
+
+
+/* ================================
+   CARD
+================================ */
+
+.checkout-card {
+    background: #fff;
+    border: 1px solid #e5eaf2;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, .05);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 750;
+    color: #0d1526;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #edf1f6;
+}
+
+.card-title i {
+    color: #2563eb;
+    font-size: 19px;
+}
+
+
+/* ================================
+   CUSTOMER
+================================ */
+
+.customer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.info-row span {
+    color: #64748b;
+}
+
+.info-row strong {
+    color: #172033;
+    text-align: right;
+    max-width: 65%;
+}
+
+
+/* ================================
+   PRODUCTS
+================================ */
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #edf1f6;
+}
+
+.checkout-product:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.checkout-product:first-child {
+    padding-top: 0;
+}
+
+.product-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.product-quantity {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.product-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2563eb;
+    white-space: nowrap;
+}
+
+
+/* ================================
+   PROMOTION
+================================ */
+
+.promotion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.promotion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e3eaf5;
+    border-radius: 10px;
+    background: #f8faff;
+}
+
+.promotion-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.promotion-info strong {
+    color: #172033;
+    font-size: 15px;
+}
+
+.promotion-info span {
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.promotion-info small {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.apply-promotion {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: .2s;
+}
+
+.apply-promotion:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.no-promotion {
+    padding: 20px;
+    text-align: center;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.no-promotion i {
+    margin-right: 6px;
+}
+
+
+/* ================================
+   PAYMENT
+================================ */
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1.5px solid #2563eb;
+    background: #f5f8ff;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.payment-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.payment-method strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.payment-method p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* ================================
+   QR
+================================ */
+
+.qr-box {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #edf1f6;
+}
+
+.qr-placeholder {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 15px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #64748b;
+    gap: 10px;
+}
+
+.qr-placeholder i {
+    font-size: 65px;
+    color: #2563eb;
+}
+
+.qr-placeholder span {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.qr-box p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* ================================
+   SUMMARY
+================================ */
+
+.checkout-right {
+    position: sticky;
+    top: 95px;
+}
+
+.order-summary {
+    background: #fff;
+    border: 1px solid #e5eaf2;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, .06);
+}
+
+.order-summary h2 {
+    margin: 0 0 25px;
+    font-size: 20px;
+    color: #0d1526;
+}
+
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.summary-row span {
+    color: #64748b;
+}
+
+.summary-row strong {
+    color: #172033;
+}
+
+.summary-row .discount {
+    color: #16a34a;
+}
+
+
+.summary-line {
+    height: 1px;
+    background: #e5eaf2;
+    margin: 20px 0;
+}
+
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-total span {
+    font-size: 15px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.summary-total strong {
+    font-size: 23px;
+    color: #2563eb;
+}
+
+
+/* ================================
+   ORDER BUTTON
+================================ */
+
+.order-btn {
+    width: 100%;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.order-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, .25);
+}
+
+.order-btn i {
+    margin-right: 7px;
+}
+
+
+/* ================================
+   SECURITY NOTE
+================================ */
+
+.secure-note {
+    margin-top: 17px;
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.secure-note i {
+    color: #16a34a;
+    margin-right: 5px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-right {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .checkout-page {
+        padding: 30px 14px 50px;
+    }
+
+    .checkout-title h1 {
+        font-size: 24px;
+    }
+
+    .checkout-card {
+        padding: 18px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .info-row strong {
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .promotion-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .apply-promotion {
+        width: 100%;
+    }
+
+    .checkout-product {
+        align-items: flex-start;
+    }
+
+    .product-price {
+        font-size: 14px;
+    }
+/* ==============================
+   PAYMENT METHOD
+============================== */
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.payment-option {
+    display: block;
+    cursor: pointer;
+}
+
+.payment-option input {
+    display: none;
+}
+
+.payment-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    transition: .25s;
+}
+
+.payment-option input:checked + .payment-content {
+    border-color: #2563eb;
+    background: #f5f9ff;
+}
+
+.payment-content strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.payment-content p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.payment-detail {
+    margin-top: 18px;
+}
+
+/* =====================================================
+   PHƯƠNG THỨC THANH TOÁN
+===================================================== */
+
+.payment-option {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 14px;
+}
+
+.payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 18px;
+
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+
+    background: #fff;
+
+    transition: all .25s ease;
+}
+
+.payment-option:hover .payment-content {
+    border-color: #2563eb;
+    background: #f8fbff;
+}
+
+
+/* Khi radio được chọn */
+.payment-option input[type="radio"]:checked
++ .payment-content {
+
+    border-color: #2563eb;
+    background: #eff6ff;
+
+    box-shadow:
+        0 0 0 2px rgba(37, 99, 235, .08);
+}
+
+
+/* Icon */
+.payment-icon-small {
+
+    width: 46px;
+    height: 46px;
+
+    min-width: 46px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eaf2ff;
+
+    color: #2563eb;
+
+    font-size: 20px;
+}
+
+
+/* Nội dung */
+.payment-text {
+    flex: 1;
+}
+
+.payment-text strong {
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 16px;
+
+    margin-bottom: 5px;
+}
+
+.payment-text p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   QR
+===================================================== */
+
+.qr-box {
+
+    margin-top: 16px;
+
+    padding: 22px;
+
+    border: 1px solid #dbe4f0;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    background: #f8fafc;
+}
+
+.qr-placeholder {
+
+    width: 180px;
+    height: 180px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 10px;
+
+    background: #fff;
+
+    border: 1px solid #dbe4f0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #2563eb;
+}
+
+.qr-placeholder i {
+    font-size: 70px;
+}
+
+.qr-placeholder span {
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #64748b;
+}
+
+.qr-box p {
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   NÚT XÁC NHẬN
+===================================================== */
+
+.order-btn {
+
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 14px 20px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #2563eb;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+.order-btn:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   GHI CHÚ BẢO MẬT
+===================================================== */
+
+.secure-note {
+
+    margin-top: 16px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.secure-note i {
+    margin-right: 5px;
+}
+}

@@ -1,0 +1,311 @@
+/* =========================================================
+   HAKY TECH - Header & Footer dùng chung cho toàn bộ trang
+   Mọi rule đều được bọc trong "header" / "footer" để không
+   bao giờ đụng độ với các class .logo/.right/.nav riêng của
+   từng trang (vd product-detail.jsp dùng .right cho layout 2 cột).
+   ========================================================= */
+
+header{
+    width:100%;
+    background:#0d1526;
+    box-shadow:0 2px 15px rgba(0,0,0,.2);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+header .header-container{
+    max-width:1400px;
+    height:74px;
+    margin:0 auto;
+    padding:0 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+}
+
+/* -------- Logo -------- */
+
+header .logo a{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#fff;
+    text-decoration:none;
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:.3px;
+    white-space:nowrap;
+}
+
+header .logo a i{
+    color:#4d8dff;
+    font-size:24px;
+}
+
+/* -------- Nhóm điều hướng bên phải (nav + actions) -------- */
+
+header .nav-group{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+header nav{
+    display:flex;
+    align-items:center;
+    gap:26px;
+}
+
+header nav a{
+    position:relative;
+    color:#e7ecf5;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+    padding:6px 2px;
+    white-space:nowrap;
+    transition:color .25s;
+}
+
+header nav a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-4px;
+    width:0;
+    height:2px;
+    background:#4d8dff;
+    transition:width .25s;
+    border-radius:2px;
+}
+
+header nav a:hover,
+header nav a.active{
+    color:#4d8dff;
+}
+
+header nav a:hover::after,
+header nav a.active::after{
+    width:100%;
+}
+
+/* -------- Khu vực hành động: giỏ hàng / đăng nhập / user -------- */
+
+header .actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+header .divider{
+    width:1px;
+    height:26px;
+    background:rgba(255,255,255,.15);
+}
+
+header .icon-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    color:#fff;
+    text-decoration:none;
+    font-size:18px;
+    background:rgba(255,255,255,.06);
+    transition:.25s;
+    flex-shrink:0;
+}
+
+header .icon-btn:hover{
+    background:#4d8dff;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+header .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:#2563eb;
+    color:#fff !important;
+    padding:10px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:14.5px;
+    white-space:nowrap;
+    transition:.25s;
+    border:1.5px solid #2563eb;
+}
+
+header .btn:hover{
+    background:#114fd3;
+    border-color:#114fd3;
+}
+
+header .btn.btn-outline{
+    background:transparent;
+    border:1.5px solid rgba(255,255,255,.35);
+}
+
+header .btn.btn-outline:hover{
+    background:rgba(255,255,255,.1);
+    border-color:#fff;
+}
+
+header .user-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#fff;
+    background:rgba(255,255,255,.06);
+    padding:6px 8px 6px 14px;
+    border-radius:30px;
+    white-space:nowrap;
+}
+
+header .user-box i.fa-circle-user{
+    font-size:24px;
+    color:#4d8dff;
+}
+
+header .user-box span{
+    font-size:14px;
+    max-width:150px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+/* -------- Responsive -------- */
+
+@media (max-width:960px){
+
+    header .header-container{
+        flex-wrap:wrap;
+        height:auto;
+        padding:14px 20px;
+        gap:12px;
+    }
+
+    header .nav-group{
+        width:100%;
+        justify-content:space-between;
+        gap:14px;
+    }
+
+    header .user-box span{
+        display:none;
+    }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer{
+    margin-top:60px;
+    background:#0d1526;
+    color:#fff;
+}
+
+footer .footer-container{
+    max-width:1400px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:30px;
+    padding:50px 40px 30px;
+}
+
+footer .footer-col h3{
+    color:#fff;
+    font-size:18px;
+    margin-bottom:18px;
+    position:relative;
+    padding-bottom:10px;
+}
+
+footer .footer-col h3::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:34px;
+    height:3px;
+    background:#4d8dff;
+    border-radius:3px;
+}
+
+footer .footer-col p{
+    color:#cbd5e1;
+    margin:8px 0;
+    font-size:14.5px;
+    line-height:1.6;
+}
+
+footer .footer-brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#fff;
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+footer .footer-brand i{
+    color:#4d8dff;
+}
+
+footer .social{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
+
+footer .social a{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    transition:.25s;
+}
+
+footer .social a:hover{
+    background:#4d8dff;
+    transform:translateY(-3px);
+}
+
+footer .footer-bottom{
+    border-top:1px solid rgba(255,255,255,.1);
+    text-align:center;
+    padding:18px 20px;
+    color:#9fb0c9;
+    font-size:13.5px;
+}
+
+@media (max-width:900px){
+
+    footer .footer-container{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media (max-width:560px){
+
+    footer .footer-container{
+        grid-template-columns:1fr;
+    }
+}

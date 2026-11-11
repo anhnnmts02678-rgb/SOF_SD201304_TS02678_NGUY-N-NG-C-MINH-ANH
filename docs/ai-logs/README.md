@@ -7,7 +7,7 @@ Sinh viên lưu các file ghi chép quá trình làm việc với AI vào thư m
 * `04_debug_logs_ai.md`: Nhật ký đưa stack trace lỗi cho AI phân tích và sửa.
 * `05_github_actions_ai.md`: Dùng AI viết workflow CI/CD.
 * `06_code_review_ai.md`: AI review và đề xuất tối ưu mã nguồn test.
-
+ 
 ---
 
 ### MẪU GHI CHÉP CHUẨN (CHO TỪNG FILE):

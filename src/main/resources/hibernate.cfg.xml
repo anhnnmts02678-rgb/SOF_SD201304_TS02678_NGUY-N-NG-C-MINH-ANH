@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- SQL Server -->
+        <property name="hibernate.connection.driver_class">
+            com.microsoft.sqlserver.jdbc.SQLServerDriver
+        </property>
+
+        <property name="hibernate.connection.url">
+            jdbc:sqlserver://localhost:1433;databaseName=Nhom3_SD2012_Weblinhkien;encrypt=true;trustServerCertificate=true
+        </property>
+
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">321120504</property>
+
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.SQLServerDialect
+        </property>
+
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+		<property name="hibernate.highlight_sql">true</property>
+		
+		
+		<mapping class="nhom3.Model.Admin"/>
+		<mapping class="nhom3.Model.Employee"/>
+		<mapping class="nhom3.Model.Users"/>
+		
+		<mapping class="nhom3.Model.Danhmuc"/>
+		<mapping class="nhom3.Model.Khuyenmai"/>
+		
+		<mapping class="nhom3.Model.Sanpham"/>
+		<mapping class="nhom3.Model.Danhgia"/>
+		
+		<mapping class="nhom3.Model.Giohang"/>
+		<mapping class="nhom3.Model.GiohangCT"/>
+		
+		<mapping class="nhom3.Model.Thanhtoan"/>
+		<mapping class="nhom3.Model.Hoadon"/>
+		<mapping class="nhom3.Model.HoadonCT"/>
+		<mapping class="nhom3.Model.Nhatky"/>
+		
+    </session-factory>
+
+</hibernate-configuration>
