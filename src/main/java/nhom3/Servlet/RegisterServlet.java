@@ -16,7 +16,16 @@ import nhom3.Utils.MailUtil;
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 
-    private UsersDao usersDao = new UsersDao();
+    private UsersDao usersDao;
+
+public RegisterServlet() {
+    this.usersDao = new UsersDao();
+}
+
+// Constructor dùng cho Unit Test
+RegisterServlet(UsersDao usersDao) {
+    this.usersDao = usersDao;
+}
 
     @Override
     protected void doPost(HttpServletRequest request,

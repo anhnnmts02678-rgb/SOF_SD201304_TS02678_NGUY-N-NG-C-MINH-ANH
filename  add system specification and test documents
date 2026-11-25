@@ -1,0 +1,1001 @@
+[1mdiff --git a/docs/SPECIFICATIONS.md b/docs/SPECIFICATIONS.md[m
+[1mindex d4ba62e..915f2b8 100644[m
+[1m--- a/docs/SPECIFICATIONS.md[m
+[1m+++ b/docs/SPECIFICATIONS.md[m
+[36m@@ -1,16 +1,353 @@[m
+[31m-# ĐẶC TẢ NGHIỆP VỤ WEB CÁ NHÂN (SPECIFICATIONS)[m
+[31m-> *Dùng làm ngữ cảnh (Context) gửi cho AI để sinh Test Plan & Test Case chính xác theo dự án riêng của bạn.*[m
+[32m+[m[32m# ĐẶC TẢ NGHIỆP VỤ WEBSITE BÁN LINH KIỆN MÁY TÍNH (SPECIFICATIONS)[m
+[32m+[m
+[32m+[m[32m- **Dự án:** Nhom3_Weblinhkien[m
+[32m+[m[32m- **Sinh viên:** Nguyễn Ngọc Minh Anh[m
+[32m+[m[32m- **MSSV:** TS02678[m
+[32m+[m[32m- **Môn học:** SOF309 - Kiểm thử phần mềm với AI[m
+[32m+[m[32m- **Cơ sở dữ liệu:** `Nhom3_SD2012_Weblinhkien`[m
+ [m
+ ---[m
+ [m
+[31m-## 1. THÔNG TIN DỰ ÁN[m
+[31m-* **Tên đề tài:** [Ví dụ: Website Bán Hàng Trực Tuyến][m
+[31m-* **Công nghệ:** Java 17, Spring Boot, MySQL / H2[m
+[31m-* **URL chạy local:** `http://localhost:8080`[m
+[31m-[m
+[31m-## 2. QUY TẮC NGHIỆP VỤ (BUSINESS RULES)[m
+[31m-* **Chức năng Đăng ký:** Form gồm `username` (5-20 ký tự), `email`, `password` (tối thiểu 8 ký tự, có ký tự đặc biệt), `confirmPassword`.[m
+[31m-* **Chức năng Đăng nhập:** Kiểm tra đúng tài khoản/mật khẩu $\rightarrow$ chuyển hướng về trang chủ; sai $\rightarrow$ báo lỗi.[m
+[31m-* **Chức năng CRUD kiểm thử (Ví dụ: Sản phẩm):**[m
+[31m-  * Thêm mới: Tên sản phẩm (bắt buộc, không trùng), Giá bán (> 0), Số lượng (>= 0).[m
+[31m-  * Sửa / Xóa: Có xác nhận trước khi xóa, cập nhật dữ liệu vào DB.[m
+[32m+[m[32m# SPECIFICATIONS.md[m
+[32m+[m
+[32m+[m[32m# 1. Tổng quan dự án[m
+[32m+[m
+[32m+[m[32m## 1.1. Giới thiệu[m
+[32m+[m
+[32m+[m[32mWebsite bán linh kiện máy tính được xây dựng nhằm hỗ trợ khách hàng tìm kiếm, xem thông tin và mua các sản phẩm linh kiện máy tính trực tuyến.[m
+[32m+[m
+[32m+[m[32mHệ thống cung cấp các chức năng quản lý sản phẩm, khách hàng, nhân viên, đơn hàng, khuyến mãi và đánh giá sản phẩm. Đồng thời, hệ thống hỗ trợ nhân viên và quản trị viên thực hiện các nghiệp vụ quản lý thông qua giao diện riêng.[m
+[32m+[m
+[32m+[m[32m## 1.2. Công nghệ sử dụng[m
+[32m+[m
+[32m+[m[32m| Thành phần | Công nghệ |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| Backend | Java Servlet, JSP |[m
+[32m+[m[32m| Frontend | HTML, CSS, JavaScript |[m
+[32m+[m[32m| Database | Microsoft SQL Server |[m
+[32m+[m[32m| ORM | Hibernate |[m
+[32m+[m[32m| Build tool | Maven |[m
+[32m+[m[32m| Server | Apache Tomcat |[m
+[32m+[m[32m| IDE | IntelliJ IDEA / Eclipse |[m
+[32m+[m
+[32m+[m[32m## 1.3. Địa chỉ chạy hệ thống[m
+[32m+[m
+[32m+[m[32m- Localhost: `http://localhost:8080/sof309-assignment-1.0-SNAPSHOT/`[m
+[32m+[m[32m- Database: `Nhom3_SD2012_Weblinhkien`[m
+[32m+[m
+[32m+[m[32m# 2. Đối tượng sử dụng hệ thống[m
+[32m+[m
+[32m+[m[32mHệ thống có 4 nhóm người dùng chính:[m
+[32m+[m
+[32m+[m[32m## 2.1. Khách vãng lai (Guest)[m
+[32m+[m
+[32m+[m[32mNgười chưa đăng nhập vào hệ thống.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Xem trang chủ.[m
+[32m+[m[32m- Xem danh sách sản phẩm.[m
+[32m+[m[32m- Tìm kiếm sản phẩm.[m
+[32m+[m[32m- Xem thông tin chi tiết sản phẩm.[m
+[32m+[m[32m- Đăng ký tài khoản.[m
+[32m+[m[32m- Đăng nhập.[m
+[32m+[m
+[32m+[m[32m## 2.2. Khách hàng (Customer)[m
+[32m+[m
+[32m+[m[32mNgười đã đăng ký và đăng nhập vào hệ thống.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Quản lý thông tin cá nhân.[m
+[32m+[m[32m- Xem và tìm kiếm sản phẩm.[m
+[32m+[m[32m- Thêm sản phẩm vào giỏ hàng.[m
+[32m+[m[32m- Cập nhật số lượng sản phẩm trong giỏ hàng.[m
+[32m+[m[32m- Xóa sản phẩm khỏi giỏ hàng.[m
+[32m+[m[32m- Đặt hàng và thực hiện thanh toán.[m
+[32m+[m[32m- Xem lịch sử đơn hàng.[m
+[32m+[m[32m- Xem chi tiết đơn hàng.[m
+[32m+[m[32m- Sử dụng mã khuyến mãi.[m
+[32m+[m[32m- Đánh giá sản phẩm.[m
+[32m+[m[32m- Đăng xuất.[m
+[32m+[m
+[32m+[m[32m## 2.3. Nhân viên (Employee)[m
+[32m+[m
+[32m+[m[32mNgười được cấp tài khoản nhân viên để quản lý các nghiệp vụ của cửa hàng.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Quản lý sản phẩm.[m
+[32m+[m[32m- Quản lý thông tin khách hàng.[m
+[32m+[m[32m- Quản lý đơn hàng.[m
+[32m+[m[32m- Quản lý đánh giá sản phẩm.[m
+[32m+[m[32m- Xem nhật ký hoạt động.[m
+[32m+[m[32m- Đăng xuất.[m
+[32m+[m
+[32m+[m[32m## 2.4. Quản trị viên (Admin)[m
+[32m+[m
+[32m+[m[32mNgười có quyền quản lý và giám sát hoạt động của hệ thống.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Quản lý sản phẩm.[m
+[32m+[m[32m- Quản lý khách hàng.[m
+[32m+[m[32m- Quản lý nhân viên.[m
+[32m+[m[32m- Quản lý chương trình khuyến mãi.[m
+[32m+[m[32m- Quản lý đơn hàng.[m
+[32m+[m[32m- Xem thống kê hoạt động kinh doanh.[m
+[32m+[m[32m- Đăng xuất.[m
+[32m+[m
+[32m+[m[32m# 3. Mô tả các chức năng chính[m
+[32m+[m
+[32m+[m[32m## 3.1. Quản lý tài khoản và xác thực[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ đăng ký, đăng nhập, đăng xuất và khôi phục mật khẩu.[m
+[32m+[m
+[32m+[m[32m- Khách hàng đăng ký tài khoản bằng thông tin cá nhân.[m
+[32m+[m[32m- Hệ thống sử dụng mã OTP để xác minh quá trình đăng ký.[m
+[32m+[m[32m- Người dùng đăng nhập bằng thông tin tài khoản và mật khẩu.[m
+[32m+[m[32m- Hệ thống phân biệt quyền truy cập giữa khách hàng, nhân viên và quản trị viên.[m
+[32m+[m[32m- Người dùng có thể đăng xuất khỏi hệ thống.[m
+[32m+[m[32m- Hỗ trợ chức năng quên mật khẩu và đặt lại mật khẩu thông qua xác minh OTP.[m
+[32m+[m
+[32m+[m[32m## 3.2. Quản lý sản phẩm[m
+[32m+[m
+[32m+[m[32mHệ thống cho phép hiển thị và quản lý thông tin sản phẩm linh kiện máy tính.[m
+[32m+[m
+[32m+[m[32mThông tin sản phẩm gồm:[m
+[32m+[m[32m- Mã sản phẩm.[m
+[32m+[m[32m- Tên sản phẩm.[m
+[32m+[m[32m- Số lượng tồn kho.[m
+[32m+[m[32m- Mô tả sản phẩm.[m
+[32m+[m[32m- Giá thành.[m
+[32m+[m[32m- Hình ảnh.[m
+[32m+[m[32m- Danh mục sản phẩm.[m
+[32m+[m[32m- Nhân viên phụ trách.[m
+[32m+[m[32m- Chương trình khuyến mãi.[m
+[32m+[m[32m- Nguồn gốc.[m
+[32m+[m[32m- Trạng thái sản phẩm.[m
+[32m+[m
+[32m+[m[32mKhách hàng có thể xem danh sách và thông tin chi tiết sản phẩm. Nhân viên và quản trị viên có thể thực hiện các nghiệp vụ quản lý sản phẩm theo quyền được cấp.[m
+[32m+[m
+[32m+[m[32m## 3.3. Quản lý danh mục sản phẩm[m
+[32m+[m
+[32m+[m[32mHệ thống phân loại sản phẩm theo danh mục nhằm hỗ trợ khách hàng tìm kiếm và lựa chọn sản phẩm thuận tiện hơn.[m
+[32m+[m
+[32m+[m[32mThông tin danh mục gồm mã danh mục, tên danh mục và ghi chú.[m
+[32m+[m
+[32m+[m[32m## 3.4. Tìm kiếm sản phẩm[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ tìm kiếm sản phẩm theo tên và lọc sản phẩm theo danh mục.[m
+[32m+[m
+[32m+[m[32mKết quả tìm kiếm được hiển thị dưới dạng danh sách sản phẩm phù hợp với thông tin người dùng cung cấp.[m
+[32m+[m
+[32m+[m[32m## 3.5. Quản lý giỏ hàng[m
+[32m+[m
+[32m+[m[32mKhách hàng có thể thêm sản phẩm vào giỏ hàng trước khi đặt mua.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Thêm sản phẩm vào giỏ hàng.[m
+[32m+[m[32m- Cập nhật số lượng sản phẩm.[m
+[32m+[m[32m- Xóa sản phẩm khỏi giỏ hàng.[m
+[32m+[m[32m- Xem thông tin sản phẩm trong giỏ hàng.[m
+[32m+[m[32m- Tính tổng giá trị giỏ hàng.[m
+[32m+[m
+[32m+[m[32m## 3.6. Quản lý đơn hàng[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ khách hàng tạo và theo dõi đơn hàng.[m
+[32m+[m
+[32m+[m[32mCác chức năng:[m
+[32m+[m[32m- Tạo đơn hàng từ giỏ hàng.[m
+[32m+[m[32m- Lưu thông tin sản phẩm trong đơn hàng.[m
+[32m+[m[32m- Tính tổng giá trị đơn hàng.[m
+[32m+[m[32m- Xem lịch sử đơn hàng.[m
+[32m+[m[32m- Xem chi tiết đơn hàng.[m
+[32m+[m[32m- Theo dõi trạng thái đơn hàng.[m
+[32m+[m[32m- Nhân viên và quản trị viên thực hiện nghiệp vụ quản lý đơn hàng theo quyền được cấp.[m
+[32m+[m
+[32m+[m[32m## 3.7. Quản lý thanh toán[m
+[32m+[m
+[32m+[m[32mHệ thống lưu trữ thông tin thanh toán liên quan đến đơn hàng.[m
+[32m+[m
+[32m+[m[32mThông tin thanh toán gồm:[m
+[32m+[m[32m- Mã thanh toán.[m
+[32m+[m[32m- Phương thức thanh toán.[m
+[32m+[m[32m- Trạng thái thanh toán.[m
+[32m+[m[32m- Thời gian thanh toán.[m
+[32m+[m[32m- Mã giao dịch.[m
+[32m+[m
+[32m+[m[32mThông tin thanh toán được liên kết với hóa đơn tương ứng.[m
+[32m+[m
+[32m+[m[32m## 3.8. Quản lý khuyến mãi[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ quản lý các chương trình khuyến mãi dành cho sản phẩm hoặc đơn hàng.[m
+[32m+[m
+[32m+[m[32mThông tin khuyến mãi gồm:[m
+[32m+[m[32m- Mã khuyến mãi.[m
+[32m+[m[32m- Loại khuyến mãi.[m
+[32m+[m[32m- Phần trăm giảm giá.[m
+[32m+[m[32m- Ngày bắt đầu.[m
+[32m+[m[32m- Ngày kết thúc.[m
+[32m+[m[32m- Mô tả.[m
+[32m+[m[32m- Trạng thái.[m
+[32m+[m
+[32m+[m[32mQuản trị viên có thể quản lý thông tin chương trình khuyến mãi. Khách hàng có thể sử dụng chương trình khuyến mãi khi mua hàng theo điều kiện áp dụng của hệ thống.[m
+[32m+[m
+[32m+[m[32m## 3.9. Đánh giá sản phẩm[m
+[32m+[m
+[32m+[m[32mKhách hàng có thể gửi đánh giá đối với sản phẩm đã mua.[m
+[32m+[m
+[32m+[m[32mThông tin đánh giá gồm:[m
+[32m+[m[32m- Mã đánh giá.[m
+[32m+[m[32m- Khách hàng thực hiện đánh giá.[m
+[32m+[m[32m- Sản phẩm được đánh giá.[m
+[32m+[m[32m- Số sao.[m
+[32m+[m[32m- Nội dung đánh giá.[m
+[32m+[m[32m- Hình ảnh đính kèm.[m
+[32m+[m[32m- Thời gian đánh giá.[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ hiển thị đánh giá sản phẩm và quản lý các đánh giá đã gửi.[m
+[32m+[m
+[32m+[m[32m## 3.10. Quản lý khách hàng[m
+[32m+[m
+[32m+[m[32mHệ thống lưu trữ và quản lý thông tin khách hàng.[m
+[32m+[m
+[32m+[m[32mThông tin khách hàng gồm:[m
+[32m+[m[32m- Mã khách hàng.[m
+[32m+[m[32m- Họ và tên.[m
+[32m+[m[32m- Số điện thoại.[m
+[32m+[m[32m- Email.[m
+[32m+[m[32m- Mật khẩu.[m
+[32m+[m[32m- Địa chỉ.[m
+[32m+[m[32m- Trạng thái tài khoản.[m
+[32m+[m
+[32m+[m[32mNhân viên và quản trị viên có thể quản lý thông tin khách hàng theo quyền được cấp.[m
+[32m+[m
+[32m+[m[32m## 3.11. Quản lý nhân viên[m
+[32m+[m
+[32m+[m[32mHệ thống lưu trữ thông tin tài khoản nhân viên phục vụ hoạt động quản lý cửa hàng.[m
+[32m+[m
+[32m+[m[32mThông tin nhân viên gồm:[m
+[32m+[m[32m- Mã nhân viên.[m
+[32m+[m[32m- Họ và tên.[m
+[32m+[m[32m- Tên đăng nhập.[m
+[32m+[m[32m- Email.[m
+[32m+[m[32m- Mật khẩu.[m
+[32m+[m[32m- Số điện thoại.[m
+[32m+[m[32m- Ngày tạo tài khoản.[m
+[32m+[m[32m- Trạng thái tài khoản.[m
+[32m+[m
+[32m+[m[32mQuản trị viên có thể quản lý danh sách nhân viên.[m
+[32m+[m
+[32m+[m[32m## 3.12. Nhật ký hoạt động[m
+[32m+[m
+[32m+[m[32mHệ thống lưu lại thông tin về các hoạt động quản lý được thực hiện bởi nhân viên hoặc quản trị viên.[m
+[32m+[m
+[32m+[m[32mThông tin nhật ký gồm:[m
+[32m+[m[32m- Mã nhật ký.[m
+[32m+[m[32m- Nhân viên thực hiện.[m
+[32m+[m[32m- Quản trị viên thực hiện.[m
+[32m+[m[32m- Hành động.[m
+[32m+[m[32m- Mô tả.[m
+[32m+[m[32m- Thời gian thực hiện.[m
+[32m+[m
+[32m+[m[32m## 3.13. Thống kê[m
+[32m+[m
+[32m+[m[32mHệ thống hỗ trợ thống kê một số thông tin tổng quan phục vụ quản lý cửa hàng.[m
+[32m+[m
+[32m+[m[32mCác thông tin thống kê gồm:[m
+[32m+[m[32m- Tổng số sản phẩm.[m
+[32m+[m[32m- Tổng số khách hàng.[m
+[32m+[m[32m- Tổng số nhân viên.[m
+[32m+[m[32m- Tổng số hóa đơn.[m
+[32m+[m[32m- Thời gian cập nhật thống kê.[m
+[32m+[m
+[32m+[m[32m# 4. Đặc tả cơ sở dữ liệu[m
+[32m+[m
+[32m+[m[32mCơ sở dữ liệu `Nhom3_SD2012_Weblinhkien` gồm các bảng chính sau:[m
+[32m+[m
+[32m+[m[32m| STT | Bảng | Mô tả |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| 1 | Admin | Lưu thông tin tài khoản quản trị viên |[m
+[32m+[m[32m| 2 | Employee | Lưu thông tin tài khoản nhân viên |[m
+[32m+[m[32m| 3 | Users | Lưu thông tin tài khoản khách hàng |[m
+[32m+[m[32m| 4 | DanhMuc | Lưu danh mục sản phẩm |[m
+[32m+[m[32m| 5 | KhuyenMai | Lưu thông tin chương trình khuyến mãi |[m
+[32m+[m[32m| 6 | SanPham | Lưu thông tin sản phẩm |[m
+[32m+[m[32m| 7 | ThanhToan | Lưu thông tin thanh toán |[m
+[32m+[m[32m| 8 | HoaDon | Lưu thông tin hóa đơn |[m
+[32m+[m[32m| 9 | HoaDonChiTiet | Lưu chi tiết sản phẩm trong hóa đơn |[m
+[32m+[m[32m| 10 | DanhGia | Lưu đánh giá của khách hàng |[m
+[32m+[m[32m| 11 | NhatKy | Lưu nhật ký hoạt động |[m
+[32m+[m[32m| 12 | GioHang | Lưu thông tin giỏ hàng |[m
+[32m+[m[32m| 13 | GioHangChiTiet | Lưu chi tiết sản phẩm trong giỏ hàng |[m
+[32m+[m[32m| 14 | ThongKe | Lưu thông tin thống kê |[m
+[32m+[m
+[32m+[m[32m## 4.1. Mối quan hệ giữa các bảng[m
+[32m+[m
+[32m+[m[32m- `Users` liên kết với `HoaDon` thông qua `MaKH`.[m
+[32m+[m[32m- `Users` liên kết với `DanhGia` thông qua `MaKH`.[m
+[32m+[m[32m- `Users` liên kết với `GioHang` thông qua `MaKH`.[m
+[32m+[m[32m- `DanhMuc` liên kết với `SanPham` thông qua `MaDM`.[m
+[32m+[m[32m- `SanPham` liên kết với `HoaDonChiTiet` thông qua `MaSP`.[m
+[32m+[m[32m- `SanPham` liên kết với `GioHangChiTiet` thông qua `MaSP`.[m
+[32m+[m[32m- `SanPham` liên kết với `DanhGia` thông qua `MaSP`.[m
+[32m+[m[32m- `KhuyenMai` liên kết với `SanPham` thông qua `MaKM`.[m
+[32m+[m[32m- `Employee` liên kết với `SanPham` thông qua `MaNV`.[m
+[32m+[m[32m- `HoaDon` liên kết với `HoaDonChiTiet` thông qua `MaHD`.[m
+[32m+[m[32m- `HoaDon` liên kết với `ThanhToan` thông qua `MaThanhToan`.[m
+[32m+[m[32m- `GioHang` liên kết với `GioHangChiTiet` thông qua `MaGH`.[m
+[32m+[m[32m- `Employee` và `Admin` được tham chiếu trong bảng `NhatKy`.[m
+[32m+[m
+[32m+[m[32m# 5. Quy trình nghiệp vụ tổng quát[m
+[32m+[m
+[32m+[m[32m## 5.1. Quy trình mua hàng[m
+[32m+[m
+[32m+[m[32m1. Khách hàng truy cập website.[m
+[32m+[m[32m2. Khách hàng tìm kiếm hoặc lựa chọn sản phẩm.[m
+[32m+[m[32m3. Khách hàng thêm sản phẩm vào giỏ hàng.[m
+[32m+[m[32m4. Khách hàng kiểm tra giỏ hàng.[m
+[32m+[m[32m5. Khách hàng tiến hành đặt hàng.[m
+[32m+[m[32m6. Hệ thống tạo hóa đơn và lưu thông tin chi tiết đơn hàng.[m
+[32m+[m[32m7. Khách hàng thực hiện thanh toán theo phương thức hệ thống hỗ trợ.[m
+[32m+[m[32m8. Khách hàng theo dõi trạng thái đơn hàng.[m
+[32m+[m
+[32m+[m[32m## 5.2. Quy trình đăng ký tài khoản[m
+[32m+[m
+[32m+[m[32m1. Khách hàng truy cập chức năng đăng ký.[m
+[32m+[m[32m2. Nhập thông tin tài khoản.[m
+[32m+[m[32m3. Hệ thống tiếp nhận thông tin đăng ký.[m
+[32m+[m[32m4. Hệ thống gửi mã OTP để xác minh.[m
+[32m+[m[32m5. Khách hàng nhập mã OTP.[m
+[32m+[m[32m6. Hệ thống xác minh và xử lý đăng ký tài khoản.[m
+[32m+[m
+[32m+[m[32m## 5.3. Quy trình đánh giá sản phẩm[m
+[32m+[m
+[32m+[m[32m1. Khách hàng truy cập sản phẩm đã mua.[m
+[32m+[m[32m2. Chọn chức năng đánh giá.[m
+[32m+[m[32m3. Nhập số sao và nội dung đánh giá.[m
+[32m+[m[32m4. Gửi đánh giá.[m
+[32m+[m[32m5. Hệ thống lưu thông tin và hiển thị đánh giá.[m
+[32m+[m
+[32m+[m[32m# 6. Phân quyền truy cập[m
+[32m+[m
+[32m+[m[32m| Chức năng | Guest | Customer | Employee | Admin |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| Xem sản phẩm | Có | Có | Có | Có |[m
+[32m+[m[32m| Tìm kiếm sản phẩm | Có | Có | Có | Có |[m
+[32m+[m[32m| Đăng ký | Có | Không | Không | Không |[m
+[32m+[m[32m| Đăng nhập | Có | Có | Có | Có |[m
+[32m+[m[32m| Quản lý giỏ hàng | Không | Có | Không | Không |[m
+[32m+[m[32m| Đặt hàng | Không | Có | Không | Không |[m
+[32m+[m[32m| Xem lịch sử đơn hàng | Không | Có | Không | Không |[m
+[32m+[m[32m| Đánh giá sản phẩm | Không | Có | Không | Không |[m
+[32m+[m[32m| Quản lý sản phẩm | Không | Không | Có | Có |[m
+[32m+[m[32m| Quản lý khách hàng | Không | Không | Có | Có |[m
+[32m+[m[32m| Quản lý nhân viên | Không | Không | Không | Có |[m
+[32m+[m[32m| Quản lý khuyến mãi | Không | Không | Không | Có |[m
+[32m+[m[32m| Quản lý đơn hàng | Không | Không | Có | Có |[m
+[32m+[m[32m| Xem thống kê | Không | Không | Không | Có |[m
+[32m+[m
+[32m+[m[32m# 7. Tài liệu tham khảo[m
+[32m+[m
+[32m+[m[32m- Source code dự án website bán linh kiện máy tính.[m
+[32m+[m[32m- File SQL tạo cơ sở dữ liệu `Nhom3_SD2012_Weblinhkien`.[m
+[32m+[m[32m- Cấu hình Maven trong `pom.xml`.[m
+[32m+[m[32m- Cấu hình Hibernate trong `hibernate.cfg.xml`.[m
+[32m+[m[32m- Tài liệu hướng dẫn và yêu cầu bài tập SOF309.[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/TEST_CASES.md b/docs/TEST_CASES.md[m
+[1mindex d586a44..ac6da95 100644[m
+[1m--- a/docs/TEST_CASES.md[m
+[1m+++ b/docs/TEST_CASES.md[m
+[36m@@ -1,9 +1,410 @@[m
+[31m-# BỘ KỊCH BẢN KIỂM THỬ (TEST CASES)[m
+[32m+[m[32m# TEST_CASES.md[m
+ [m
+[31m-| Test Case ID | Chức năng | Mô tả ca kiểm thử | Loại test (Pos/Neg) | Các bước thực hiện | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi | Trạng thái (Pass/Fail) |[m
+[31m-| :---: | :---: | :--- | :---: | :--- | :--- | :--- | :---: |[m
+[31m-| **TC_AUTH_01** | Login | Đăng nhập thành công với tài khoản đúng | Positive | 1. Nhập username<br>2. Nhập password<br>3. Bấm Đăng nhập | `admin` / `123456` | Chuyển hướng tới trang chủ | Pass |[m
+[31m-| **TC_AUTH_02** | Login | Đăng nhập thất bại khi để trống mật khẩu | Negative | 1. Nhập username<br>2. Bỏ trống password<br>3. Bấm Đăng nhập | `admin` / `""` | Báo lỗi "Mật khẩu không được để trống" | Pass |[m
+[31m-| **TC_CRUD_01** | CRUD | Thêm mới bản ghi thành công | Positive | 1. Mở form thêm mới<br>2. Điền thông tin hợp lệ<br>3. Bấm Lưu | Dữ liệu hợp lệ | Lưu thành công, dữ liệu hiển thị trên bảng | Pass |[m
+[31m-| **TC_CRUD_02** | CRUD | Thêm mới thất bại khi dữ liệu không hợp lệ | Negative | 1. Mở form thêm mới<br>2. Nhập sai định dạng/để trống<br>3. Bấm Lưu | Dữ liệu sai | Báo lỗi validation, không lưu vào DB | Pass |[m
+[32m+[m[32m# 1. Thông tin chung[m
+ [m
+[32m+[m[32m## 1.1. Thông tin dự án[m
+[32m+[m
+[32m+[m[32m| Thành phần | Nội dung |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| Tên dự án | Website bán linh kiện máy tính Nhom3_Weblinhkien |[m
+[32m+[m[32m| Môn học | SOF309 - Kiểm thử phần mềm với AI |[m
+[32m+[m[32m| Người thực hiện | Nguyễn Ngọc Minh Anh |[m
+[32m+[m[32m| MSSV | TS02678 |[m
+[32m+[m[32m| Phiên bản | 1.0 |[m
+[32m+[m
+[32m+[m[32m## 1.2. Mục đích[m
+[32m+[m
+[32m+[m[32mTài liệu mô tả các trường hợp kiểm thử được xây dựng dựa trên yêu cầu nghiệp vụ, source code và cấu trúc cơ sở dữ liệu của website.[m
+[32m+[m
+[32m+[m[32mCác kỹ thuật kiểm thử được sử dụng:[m
+[32m+[m
+[32m+[m[32m- EP - Equivalence Partitioning.[m
+[32m+[m[32m- BVA - Boundary Value Analysis.[m
+[32m+[m[32m- Decision Table Testing.[m
+[32m+[m[32m- State Transition Testing.[m
+[32m+[m
+[32m+[m[32m## 1.3. Quy ước kết quả[m
+[32m+[m
+[32m+[m[32m| Trạng thái | Ý nghĩa |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| Not Run | Chưa thực hiện kiểm thử |[m
+[32m+[m[32m| Pass | Kết quả thực tế đúng với kết quả mong đợi |[m
+[32m+[m[32m| Fail | Kết quả thực tế không đúng với kết quả mong đợi |[m
+[32m+[m
+[32m+[m[32m# 2. Equivalence Partitioning (EP) - Phân vùng tương đương[m
+[32m+[m
+[32m+[m[32m## 2.1. Chức năng đăng nhập[m
+[32m+[m
+[32m+[m[32mPhân chia dữ liệu đăng nhập thành các nhóm:[m
+[32m+[m
+[32m+[m[32m| Nhóm | Dữ liệu đầu vào | Phân loại |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| EP-AUTH-01 | Tài khoản tồn tại, mật khẩu đúng, tài khoản hoạt động | Hợp lệ |[m
+[32m+[m[32m| EP-AUTH-02 | Tài khoản không tồn tại | Không hợp lệ |[m
+[32m+[m[32m| EP-AUTH-03 | Mật khẩu không chính xác | Không hợp lệ |[m
+[32m+[m[32m| EP-AUTH-04 | Tài khoản bị khóa hoặc không hoạt động | Không hợp lệ |[m
+[32m+[m[32m| EP-AUTH-05 | Tài khoản quản trị viên hoặc nhân viên sử dụng Username, Email hoặc SĐT | Hợp lệ nếu thông tin xác thực đúng |[m
+[32m+[m[32m| EP-AUTH-06 | Tài khoản khách hàng sử dụng Email hoặc SĐT | Hợp lệ nếu thông tin xác thực đúng |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Dữ liệu kiểm thử | Các bước thực hiện | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| EP-LOGIN-01 | Tài khoản khách hàng đang hoạt động, mật khẩu đúng | Nhập Email và mật khẩu, nhấn Đăng nhập | Đăng nhập thành công và chuyển đến trang chủ | Not Run |[m
+[32m+[m[32m| EP-LOGIN-02 | Tài khoản nhân viên đang hoạt động, mật khẩu đúng | Nhập Username và mật khẩu | Đăng nhập thành công và chuyển đến trang nhân viên | Not Run |[m
+[32m+[m[32m| EP-LOGIN-03 | Tài khoản quản trị viên đang hoạt động, mật khẩu đúng | Nhập Email và mật khẩu | Đăng nhập thành công và chuyển đến trang quản trị | Not Run |[m
+[32m+[m[32m| EP-LOGIN-04 | Tài khoản không tồn tại | Nhập thông tin tài khoản không tồn tại | Hiển thị thông báo sai tài khoản hoặc mật khẩu | Not Run |[m
+[32m+[m[32m| EP-LOGIN-05 | Tài khoản tồn tại nhưng mật khẩu sai | Nhập Email và mật khẩu không chính xác | Không đăng nhập được, hiển thị thông báo lỗi | Not Run |[m
+[32m+[m[32m| EP-LOGIN-06 | Tài khoản không hoạt động | Nhập đúng thông tin của tài khoản bị khóa | Không cho phép đăng nhập | Not Run |[m
+[32m+[m
+[32m+[m[32m## 2.2. Chức năng đăng ký tài khoản[m
+[32m+[m
+[32m+[m[32mPhân chia dữ liệu đăng ký:[m
+[32m+[m
+[32m+[m[32m| Nhóm | Dữ liệu đầu vào | Phân loại |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| EP-REG-01 | Mật khẩu và xác nhận mật khẩu giống nhau | Hợp lệ |[m
+[32m+[m[32m| EP-REG-02 | Mật khẩu và xác nhận mật khẩu khác nhau | Không hợp lệ |[m
+[32m+[m[32m| EP-REG-03 | Email đã được sử dụng | Không hợp lệ |[m
+[32m+[m[32m| EP-REG-04 | Số điện thoại đã được sử dụng | Không hợp lệ |[m
+[32m+[m[32m| EP-REG-05 | Email và số điện thoại chưa tồn tại | Hợp lệ để tiếp tục xác minh OTP |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Dữ liệu kiểm thử | Các bước thực hiện | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| EP-REG-01 | Mật khẩu và xác nhận mật khẩu giống nhau, Email và SĐT mới | Nhập thông tin đăng ký và gửi biểu mẫu | Hệ thống tạo OTP và chuyển đến trang xác minh | Not Run |[m
+[32m+[m[32m| EP-REG-02 | Mật khẩu và xác nhận mật khẩu khác nhau | Nhập thông tin đăng ký và gửi biểu mẫu | Hiển thị thông báo mật khẩu không khớp | Not Run |[m
+[32m+[m[32m| EP-REG-03 | Email đã tồn tại trong hệ thống | Nhập Email đã đăng ký trước đó | Hiển thị thông báo Email đã được sử dụng | Not Run |[m
+[32m+[m[32m| EP-REG-04 | Số điện thoại đã tồn tại | Nhập SĐT đã được đăng ký | Hiển thị thông báo SĐT đã được sử dụng | Not Run |[m
+[32m+[m[32m| EP-REG-05 | Email và SĐT chưa tồn tại | Nhập thông tin hợp lệ và gửi biểu mẫu | Hệ thống gửi OTP đến Email đăng ký | Not Run |[m
+[32m+[m
+[32m+[m[32m## 2.3. Chức năng giỏ hàng[m
+[32m+[m
+[32m+[m[32mPhân chia dữ liệu:[m
+[32m+[m
+[32m+[m[32m| Nhóm | Dữ liệu đầu vào | Phân loại |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| EP-CART-01 | Khách hàng đã đăng nhập | Hợp lệ |[m
+[32m+[m[32m| EP-CART-02 | Người dùng chưa đăng nhập | Không hợp lệ |[m
+[32m+[m[32m| EP-CART-03 | Sản phẩm tồn tại và đang hoạt động | Hợp lệ |[m
+[32m+[m[32m| EP-CART-04 | Sản phẩm không tồn tại hoặc không hoạt động | Không hợp lệ |[m
+[32m+[m[32m| EP-CART-05 | Số lượng không vượt quá tồn kho | Hợp lệ |[m
+[32m+[m[32m| EP-CART-06 | Số lượng vượt quá tồn kho | Không hợp lệ |[m
+[32m+[m[32m| EP-CART-07 | Mã sản phẩm hoặc số lượng không phải số nguyên hợp lệ | Không hợp lệ |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Dữ liệu kiểm thử | Các bước thực hiện | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| EP-CART-01 | Khách hàng chưa đăng nhập | Truy cập chức năng thêm sản phẩm vào giỏ | Chuyển đến trang đăng nhập | Not Run |[m
+[32m+[m[32m| EP-CART-02 | Sản phẩm tồn tại, đang hoạt động và còn hàng | Đăng nhập, chọn sản phẩm và thêm vào giỏ | Sản phẩm được thêm vào giỏ hàng | Not Run |[m
+[32m+[m[32m| EP-CART-03 | Mã sản phẩm không tồn tại | Gửi yêu cầu thêm sản phẩm với mã không tồn tại | Hệ thống thông báo sản phẩm không tồn tại | Not Run |[m
+[32m+[m[32m| EP-CART-04 | Sản phẩm không hoạt động | Gửi yêu cầu thêm sản phẩm đã ngừng hoạt động | Hệ thống từ chối thêm sản phẩm | Not Run |[m
+[32m+[m[32m| EP-CART-05 | Số lượng lớn hơn tồn kho | Thêm sản phẩm với số lượng vượt quá tồn kho | Hệ thống thông báo không đủ hàng | Not Run |[m
+[32m+[m[32m| EP-CART-06 | Mã sản phẩm hoặc số lượng chứa ký tự không phải số | Gửi yêu cầu thêm sản phẩm | Hệ thống từ chối tham số không hợp lệ | Not Run |[m
+[32m+[m
+[32m+[m[32m## 2.4. Chức năng đánh giá sản phẩm[m
+[32m+[m
+[32m+[m[32mPhân chia dữ liệu:[m
+[32m+[m
+[32m+[m[32m| Nhóm | Dữ liệu đầu vào | Phân loại |[m
+[32m+[m[32m|---|---|---|[m
+[32m+[m[32m| EP-REVIEW-01 | Khách hàng đã đăng nhập và đã mua, nhận hàng | Hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-02 | Khách hàng chưa đăng nhập | Không hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-03 | Khách hàng chưa mua hoặc chưa nhận hàng | Không hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-04 | Nội dung đánh giá không được để trống | Hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-05 | Nội dung đánh giá trống hoặc chỉ chứa khoảng trắng | Không hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-06 | Số sao từ 1 đến 5 | Hợp lệ |[m
+[32m+[m[32m| EP-REVIEW-07 | Số sao nhỏ hơn 1 hoặc lớn hơn 5 | Không hợp lệ |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Dữ liệu kiểm thử | Các bước thực hiện | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| EP-REVIEW-01 | Khách hàng đã mua và nhận hàng, số sao hợp lệ, nội dung có dữ liệu | Đăng nhập và gửi đánh giá | Đánh giá được lưu thành công | Not Run |[m
+[32m+[m[32m| EP-REVIEW-02 | Khách hàng chưa đăng nhập | Gửi yêu cầu đánh giá sản phẩm | Chuyển đến trang đăng nhập | Not Run |[m
+[32m+[m[32m| EP-REVIEW-03 | Khách hàng chưa mua hoặc chưa nhận sản phẩm | Đăng nhập và gửi đánh giá | Hệ thống từ chối đánh giá | Not Run |[m
+[32m+[m[32m| EP-REVIEW-04 | Nội dung đánh giá chỉ chứa khoảng trắng | Nhập nội dung khoảng trắng và gửi đánh giá | Hiển thị thông báo yêu cầu nhập nội dung | Not Run |[m
+[32m+[m[32m| EP-REVIEW-05 | Khách hàng đã đánh giá sản phẩm trước đó | Gửi đánh giá mới cho cùng sản phẩm | Hệ thống cập nhật đánh giá cũ thay vì tạo đánh giá mới | Not Run |[m
+[32m+[m
+[32m+[m[32m# 3. Boundary Value Analysis (BVA) - Phân tích giá trị biên[m
+[32m+[m
+[32m+[m[32m## 3.1. Kiểm tra số lượng sản phẩm trong giỏ hàng[m
+[32m+[m
+[32m+[m[32mGiả sử sản phẩm có số lượng tồn kho là 10.[m
+[32m+[m[32mCác giá trị kiểm thử được chọn:[m
+[32m+[m
+[32m+[m[32m- 0: Giá trị không hợp lệ đối với cập nhật giỏ hàng.[m
+[32m+[m[32m- 1: Giá trị nhỏ nhất hợp lệ.[m
+[32m+[m[32m- 9: Giá trị gần giới hạn tồn kho.[m
+[32m+[m[32m- 10: Giá trị bằng tồn kho.[m
+[32m+[m[32m- 11: Giá trị vượt quá tồn kho.[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Chức năng | Số lượng đầu vào | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---:|---|---|[m
+[32m+[m[32m| BVA-CART-01 | Cập nhật giỏ hàng | 0 | Từ chối cập nhật vì số lượng phải lớn hơn 0 | Not Run |[m
+[32m+[m[32m| BVA-CART-02 | Cập nhật giỏ hàng | 1 | Cập nhật thành công | Not Run |[m
+[32m+[m[32m| BVA-CART-03 | Cập nhật giỏ hàng | 9 | Cập nhật thành công nếu tồn kho là 10 | Not Run |[m
+[32m+[m[32m| BVA-CART-04 | Cập nhật giỏ hàng | 10 | Cập nhật thành công | Not Run |[m
+[32m+[m[32m| BVA-CART-05 | Cập nhật giỏ hàng | 11 | Từ chối vì vượt quá tồn kho | Not Run |[m
+[32m+[m
+[32m+[m[32m**Kiểm tra thêm với chức năng thêm vào giỏ hàng:**[m
+[32m+[m
+[32m+[m[32m| ID | Số lượng đầu vào | Kết quả theo source code hiện tại | Trạng thái |[m
+[32m+[m[32m|---|---:|---|---|[m
+[32m+[m[32m| BVA-ADD-01 | 0 | Hệ thống tự chuyển số lượng thành 1 trước khi thêm | Not Run |[m
+[32m+[m[32m| BVA-ADD-02 | 1 | Thêm thành công nếu sản phẩm còn hàng | Not Run |[m
+[32m+[m[32m| BVA-ADD-03 | 10 | Thêm thành công nếu tồn kho là 10 | Not Run |[m
+[32m+[m[32m| BVA-ADD-04 | 11 | Từ chối vì vượt quá tồn kho | Not Run |[m
+[32m+[m
+[32m+[m[32m## 3.2. Kiểm tra số sao đánh giá sản phẩm[m
+[32m+[m
+[32m+[m[32mCơ sở dữ liệu quy định số sao đánh giá từ 1 đến 5. Chức năng đánh giá trong Servlet cũng kiểm tra giới hạn này.[m
+[32m+[m
+[32m+[m[32mCác giá trị kiểm thử:[m
+[32m+[m
+[32m+[m[32m- 0: Nhỏ hơn giới hạn.[m
+[32m+[m[32m- 1: Giá trị nhỏ nhất hợp lệ.[m
+[32m+[m[32m- 2: Giá trị hợp lệ.[m
+[32m+[m[32m- 4: Giá trị hợp lệ.[m
+[32m+[m[32m- 5: Giá trị lớn nhất hợp lệ.[m
+[32m+[m[32m- 6: Lớn hơn giới hạn.[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Số sao đầu vào | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---:|---|---|[m
+[32m+[m[32m| BVA-REVIEW-01 | 0 | Từ chối đánh giá | Not Run |[m
+[32m+[m[32m| BVA-REVIEW-02 | 1 | Chấp nhận đánh giá | Not Run |[m
+[32m+[m[32m| BVA-REVIEW-03 | 2 | Chấp nhận đánh giá | Not Run |[m
+[32m+[m[32m| BVA-REVIEW-04 | 4 | Chấp nhận đánh giá | Not Run |[m
+[32m+[m[32m| BVA-REVIEW-05 | 5 | Chấp nhận đánh giá | Not Run |[m
+[32m+[m[32m| BVA-REVIEW-06 | 6 | Từ chối đánh giá | Not Run |[m
+[32m+[m
+[32m+[m[32m# 4. Decision Table Testing - Kiểm thử bảng quyết định[m
+[32m+[m
+[32m+[m[32m## 4.1. Chức năng đăng nhập[m
+[32m+[m
+[32m+[m[32mCác điều kiện kiểm thử:[m
+[32m+[m
+[32m+[m[32m- Tài khoản có tồn tại hay không.[m
+[32m+[m[32m- Mật khẩu có chính xác hay không.[m
+[32m+[m[32m- Tài khoản có đang hoạt động hay không.[m
+[32m+[m
+[32m+[m[32m### Bảng quyết định[m
+[32m+[m
+[32m+[m[32m| Điều kiện / Quy tắc | R1 | R2 | R3 | R4 |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| Tài khoản tồn tại | Có | Có | Có | Không |[m
+[32m+[m[32m| Mật khẩu chính xác | Có | Có | Không | - |[m
+[32m+[m[32m| Tài khoản đang hoạt động | Có | Không | Có | - |[m
+[32m+[m[32m| **Kết quả** | | | | |[m
+[32m+[m[32m| Cho phép đăng nhập | Có | Không | Không | Không |[m
+[32m+[m[32m| Hiển thị thông báo lỗi | Không | Có | Có | Có |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Quy tắc | Dữ liệu kiểm thử | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| DT-LOGIN-01 | R1 | Tài khoản tồn tại, mật khẩu đúng, đang hoạt động | Đăng nhập thành công | Not Run |[m
+[32m+[m[32m| DT-LOGIN-02 | R2 | Tài khoản tồn tại, mật khẩu đúng, không hoạt động | Từ chối đăng nhập | Not Run |[m
+[32m+[m[32m| DT-LOGIN-03 | R3 | Tài khoản tồn tại, mật khẩu sai, đang hoạt động | Hiển thị thông báo lỗi | Not Run |[m
+[32m+[m[32m| DT-LOGIN-04 | R4 | Tài khoản không tồn tại | Hiển thị thông báo lỗi | Not Run |[m
+[32m+[m
+[32m+[m[32m## 4.2. Chức năng đặt hàng[m
+[32m+[m
+[32m+[m[32mCác điều kiện kiểm thử:[m
+[32m+[m
+[32m+[m[32m- Khách hàng đã đăng nhập.[m
+[32m+[m[32m- Giỏ hàng có sản phẩm.[m
+[32m+[m[32m- Đã chọn phương thức thanh toán.[m
+[32m+[m[32m- Sản phẩm trong giỏ còn đủ hàng.[m
+[32m+[m
+[32m+[m[32m### Bảng quyết định[m
+[32m+[m
+[32m+[m[32m| Điều kiện / Quy tắc | R1 | R2 | R3 | R4 | R5 |[m
+[32m+[m[32m|---|---|---|---|---|---|[m
+[32m+[m[32m| Đã đăng nhập | Không | Có | Có | Có | Có |[m
+[32m+[m[32m| Giỏ hàng có sản phẩm | - | Không | Có | Có | Có |[m
+[32m+[m[32m| Đã chọn phương thức thanh toán | - | - | Không | Có | Có |[m
+[32m+[m[32m| Tồn kho đủ | - | - | - | Không | Có |[m
+[32m+[m[32m| **Kết quả** | | | | | |[m
+[32m+[m[32m| Cho phép tạo đơn hàng | Không | Không | Không | Không | Có |[m
+[32m+[m[32m| Chuyển đến trang đăng nhập | Có | Không | Không | Không | Không |[m
+[32m+[m[32m| Yêu cầu kiểm tra giỏ hàng | Không | Có | Không | Không | Không |[m
+[32m+[m[32m| Hiển thị lỗi phương thức thanh toán | Không | Không | Có | Không | Không |[m
+[32m+[m[32m| Hiển thị lỗi tồn kho | Không | Không | Không | Có | Không |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Quy tắc | Dữ liệu kiểm thử | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| DT-ORDER-01 | R1 | Khách hàng chưa đăng nhập | Chuyển đến trang đăng nhập | Not Run |[m
+[32m+[m[32m| DT-ORDER-02 | R2 | Đã đăng nhập nhưng giỏ hàng trống | Chuyển về giỏ hàng | Not Run |[m
+[32m+[m[32m| DT-ORDER-03 | R3 | Giỏ hàng có sản phẩm nhưng chưa chọn phương thức thanh toán | Hiển thị yêu cầu chọn phương thức thanh toán | Not Run |[m
+[32m+[m[32m| DT-ORDER-04 | R4 | Đã chọn thanh toán nhưng tồn kho không đủ | Từ chối đặt hàng và hiển thị lỗi | Not Run |[m
+[32m+[m[32m| DT-ORDER-05 | R5 | Đã đăng nhập, giỏ hàng có sản phẩm, chọn phương thức thanh toán và tồn kho đủ | Tạo thanh toán, hóa đơn và chi tiết hóa đơn thành công | Not Run |[m
+[32m+[m
+[32m+[m[32m## 4.3. Chức năng đánh giá sản phẩm[m
+[32m+[m
+[32m+[m[32mCác điều kiện kiểm thử:[m
+[32m+[m
+[32m+[m[32m- Khách hàng đã đăng nhập.[m
+[32m+[m[32m- Khách hàng đã mua và nhận hàng.[m
+[32m+[m[32m- Số sao nằm trong khoảng 1 đến 5.[m
+[32m+[m[32m- Nội dung đánh giá không được để trống.[m
+[32m+[m
+[32m+[m[32m### Bảng quyết định[m
+[32m+[m
+[32m+[m[32m| Điều kiện / Quy tắc | R1 | R2 | R3 | R4 | R5 |[m
+[32m+[m[32m|---|---|---|---|---|---|[m
+[32m+[m[32m| Đã đăng nhập | Không | Có | Có | Có | Có |[m
+[32m+[m[32m| Đã mua và nhận hàng | - | Không | Có | Có | Có |[m
+[32m+[m[32m| Số sao hợp lệ | - | - | Không | Có | Có |[m
+[32m+[m[32m| Nội dung không trống | - | - | - | Không | Có |[m
+[32m+[m[32m| **Kết quả** | | | | | |[m
+[32m+[m[32m| Cho phép gửi đánh giá | Không | Không | Không | Không | Có |[m
+[32m+[m[32m| Chuyển đến trang đăng nhập | Có | Không | Không | Không | Không |[m
+[32m+[m[32m| Từ chối đánh giá | Không | Có | Có | Có | Không |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Quy tắc | Dữ liệu kiểm thử | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| DT-REVIEW-01 | R1 | Chưa đăng nhập | Chuyển đến trang đăng nhập | Not Run |[m
+[32m+[m[32m| DT-REVIEW-02 | R2 | Đã đăng nhập nhưng chưa mua hoặc chưa nhận hàng | Từ chối đánh giá | Not Run |[m
+[32m+[m[32m| DT-REVIEW-03 | R3 | Đã mua và nhận hàng nhưng số sao không hợp lệ | Từ chối đánh giá | Not Run |[m
+[32m+[m[32m| DT-REVIEW-04 | R4 | Số sao hợp lệ nhưng nội dung trống | Yêu cầu nhập nội dung | Not Run |[m
+[32m+[m[32m| DT-REVIEW-05 | R5 | Đủ điều kiện và nội dung hợp lệ | Lưu hoặc cập nhật đánh giá thành công | Not Run |[m
+[32m+[m
+[32m+[m[32m# 5. State Transition Testing - Kiểm thử chuyển trạng thái[m
+[32m+[m
+[32m+[m[32m## 5.1. Trạng thái đăng nhập[m
+[32m+[m
+[32m+[m[32mCác trạng thái:[m
+[32m+[m
+[32m+[m[32m- S0: Người dùng chưa đăng nhập.[m
+[32m+[m[32m- S1: Khách hàng đã đăng nhập.[m
+[32m+[m[32m- S2: Nhân viên đã đăng nhập.[m
+[32m+[m[32m- S3: Quản trị viên đã đăng nhập.[m
+[32m+[m
+[32m+[m[32m### Bảng chuyển trạng thái[m
+[32m+[m
+[32m+[m[32m| Trạng thái hiện tại | Sự kiện | Trạng thái tiếp theo | Kết quả mong đợi |[m
+[32m+[m[32m|---|---|---|---|[m
+[32m+[m[32m| S0 | Đăng nhập khách hàng thành công | S1 | Chuyển đến trang chủ |[m
+[32m+[m[32m| S0 | Đăng nhập nhân viên thành công | S2 | Chuyển đến trang nhân viên |[m
+[32m+[m[32m| S0 | Đăng nhập quản trị viên thành công | S3 | Chuyển đến trang quản trị |[m
+[32m+[m[32m| S0 | Đăng nhập thất bại | S0 | Hiển thị thông báo lỗi |[m
+[32m+[m[32m| S1 | Đăng xuất | S0 | Hủy Session và chuyển đến trang đăng nhập |[m
+[32m+[m[32m| S2 | Đăng xuất | S0 | Hủy Session và chuyển đến trang đăng nhập |[m
+[32m+[m[32m| S3 | Đăng xuất | S0 | Hủy Session và chuyển đến trang đăng nhập |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Trạng thái ban đầu | Thao tác | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| ST-LOGIN-01 | Chưa đăng nhập | Đăng nhập khách hàng hợp lệ | Chuyển sang trạng thái khách hàng đã đăng nhập | Not Run |[m
+[32m+[m[32m| ST-LOGIN-02 | Chưa đăng nhập | Đăng nhập nhân viên hợp lệ | Chuyển sang trạng thái nhân viên đã đăng nhập | Not Run |[m
+[32m+[m[32m| ST-LOGIN-03 | Chưa đăng nhập | Đăng nhập quản trị viên hợp lệ | Chuyển sang trạng thái quản trị viên đã đăng nhập | Not Run |[m
+[32m+[m[32m| ST-LOGIN-04 | Chưa đăng nhập | Nhập sai mật khẩu | Vẫn ở trạng thái chưa đăng nhập | Not Run |[m
+[32m+[m[32m| ST-LOGIN-05 | Đã đăng nhập | Nhấn Đăng xuất | Session bị hủy và chuyển về trang đăng nhập | Not Run |[m
+[32m+[m
+[32m+[m[32m## 5.2. Trạng thái xác minh OTP đăng ký[m
+[32m+[m
+[32m+[m[32mCác trạng thái:[m
+[32m+[m
+[32m+[m[32m- S0: Chưa gửi thông tin đăng ký.[m
+[32m+[m[32m- S1: Đã gửi thông tin và đang chờ xác minh OTP.[m
+[32m+[m[32m- S2: OTP hợp lệ, tài khoản được tạo.[m
+[32m+[m[32m- S3: OTP không hợp lệ.[m
+[32m+[m
+[32m+[m[32m### Bảng chuyển trạng thái[m
+[32m+[m
+[32m+[m[32m| Trạng thái hiện tại | Sự kiện | Trạng thái tiếp theo | Kết quả mong đợi |[m
+[32m+[m[32m|---|---|---|---|[m
+[32m+[m[32m| S0 | Gửi thông tin đăng ký hợp lệ | S1 | Hệ thống tạo OTP và chuyển đến trang xác minh |[m
+[32m+[m[32m| S1 | Nhập OTP chính xác | S2 | Tạo tài khoản và chuyển đến trang đăng nhập |[m
+[32m+[m[32m| S1 | Nhập OTP sai | S3 | Hiển thị thông báo OTP không đúng |[m
+[32m+[m[32m| S3 | Nhập lại OTP chính xác | S2 | Tạo tài khoản thành công |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Trạng thái ban đầu | Thao tác | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| ST-OTP-01 | Chưa đăng ký | Gửi thông tin đăng ký hợp lệ | Chuyển đến trang xác minh OTP | Not Run |[m
+[32m+[m[32m| ST-OTP-02 | Đang chờ OTP | Nhập OTP chính xác | Tài khoản được tạo trong database | Not Run |[m
+[32m+[m[32m| ST-OTP-03 | Đang chờ OTP | Nhập OTP sai | Hiển thị thông báo OTP không đúng | Not Run |[m
+[32m+[m[32m| ST-OTP-04 | OTP không hợp lệ | Nhập lại OTP chính xác | Tạo tài khoản thành công | Not Run |[m
+[32m+[m
+[32m+[m[32m## 5.3. Trạng thái đơn hàng[m
+[32m+[m
+[32m+[m[32mCác trạng thái được sử dụng trong nghiệp vụ quản lý đơn hàng:[m
+[32m+[m
+[32m+[m[32m- S0: CHO_XAC_NHAN.[m
+[32m+[m[32m- S1: DANG_XU_LY.[m
+[32m+[m[32m- S2: DANG_GIAO.[m
+[32m+[m[32m- S3: DA_GIAO.[m
+[32m+[m[32m- S4: DA_HUY.[m
+[32m+[m
+[32m+[m[32m### Sơ đồ chuyển trạng thái[m
+[32m+[m
+[32m+[m[32m```text[m
+[32m+[m[32mCHO_XAC_NHAN[m
+[32m+[m[32m      |[m
+[32m+[m[32m      | process[m
+[32m+[m[32m      v[m
+[32m+[m[32mDANG_XU_LY[m
+[32m+[m[32m      |[m
+[32m+[m[32m      | ship[m
+[32m+[m[32m      v[m
+[32m+[m[32mDANG_GIAO[m
+[32m+[m[32m      |[m
+[32m+[m[32m      | done[m
+[32m+[m[32m      v[m
+[32m+[m[32mDA_GIAO[m
+[32m+[m
+[32m+[m[32mCHO_XAC_NHAN[m
+[32m+[m[32m      |[m
+[32m+[m[32m      | cancel[m
+[32m+[m[32m      v[m
+[32m+[m[32mDA_HUY[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### Bảng chuyển trạng thái[m
+[32m+[m
+[32m+[m[32m| Trạng thái hiện tại | Thao tác | Trạng thái tiếp theo | Kết quả mong đợi |[m
+[32m+[m[32m|---|---|---|---|[m
+[32m+[m[32m| CHO_XAC_NHAN | process | DANG_XU_LY | Cập nhật trạng thái thành công |[m
+[32m+[m[32m| DANG_XU_LY | ship | DANG_GIAO | Cập nhật trạng thái thành công |[m
+[32m+[m[32m| DANG_GIAO | done | DA_GIAO | Cập nhật trạng thái thành công |[m
+[32m+[m[32m| CHO_XAC_NHAN | cancel | DA_HUY | Hủy đơn và hoàn lại tồn kho |[m
+[32m+[m[32m| DA_GIAO | cancel | DA_GIAO | Không thay đổi trạng thái |[m
+[32m+[m[32m| DA_HUY | process | DA_HUY | Không thay đổi trạng thái |[m
+[32m+[m
+[32m+[m[32m### Test Case[m
+[32m+[m
+[32m+[m[32m| ID | Trạng thái ban đầu | Thao tác | Kết quả mong đợi | Trạng thái |[m
+[32m+[m[32m|---|---|---|---|---|[m
+[32m+[m[32m| ST-ORDER-01 | CHO_XAC_NHAN | Nhân viên xác nhận xử lý đơn | Chuyển sang DANG_XU_LY | Not Run |[m
+[32m+[m[32m| ST-ORDER-02 | DANG_XU_LY | Nhân viên chuyển đơn sang giao hàng | Chuyển sang DANG_GIAO | Not Run |[m
+[32m+[m[32m| ST-ORDER-03 | DANG_GIAO | Nhân viên xác nhận đã giao | Chuyển sang DA_GIAO | Not Run |[m
+[32m+[m[32m| ST-ORDER-04 | CHO_XAC_NHAN | Nhân viên hủy đơn | Chuyển sang DA_HUY và hoàn lại tồn kho | Not Run |[m
+[32m+[m[32m| ST-ORDER-05 | DA_GIAO | Thực hiện thao tác hủy đơn | Không thay đổi trạng thái | Not Run |[m
+[32m+[m[32m| ST-ORDER-06 | DA_HUY | Thực hiện thao tác xử lý đơn | Không thay đổi trạng thái | Not Run |[m
+[32m+[m
+[32m+[m[32m# 6. Tổng kết[m
+[32m+[m
+[32m+[m[32mTài liệu Test Case được xây dựng dựa trên 4 kỹ thuật thiết kế kiểm thử:[m
+[32m+[m
+[32m+[m[32m1. EP - Phân vùng tương đương.[m
+[32m+[m[32m2. BVA - Phân tích giá trị biên.[m
+[32m+[m[32m3. Decision Table - Kiểm thử bảng quyết định.[m
+[32m+[m[32m4. State Transition - Kiểm thử chuyển trạng thái.[m
+[32m+[m
+[32m+[m[32mCác trường hợp kiểm thử tập trung vào những nghiệp vụ chính của website như tài khoản, sản phẩm, giỏ hàng, đặt hàng, đánh giá và quản lý đơn hàng.[m
+[32m+[m
+[32m+[m[32mKết quả kiểm thử sẽ được cập nhật sau khi thực hiện trên môi trường thực tế. Những trường hợp chưa thực hiện được giữ trạng thái Not Run.[m
+\ No newline at end of file[m
+[1mdiff --git a/docs/TEST_PLAN.md b/docs/TEST_PLAN.md[m
+[1mindex 56a2ca3..a0ac25e 100644[m
+[1m--- a/docs/TEST_PLAN.md[m
+[1m+++ b/docs/TEST_PLAN.md[m
+[36m@@ -1,19 +1,190 @@[m
+ # KẾ HOẠCH KIỂM THỬ (TEST PLAN)[m
+ [m
+[31m-* **Dự án:** [Tên dự án Web cá nhân][m
+[31m-* **Sinh viên:** [Họ và tên - MSSV][m
+[32m+[m[32m- **Dự án:** Website bán linh kiện máy tính Nhom3_Weblinhkien[m
+[32m+[m[32m- **Sinh viên:** Nguyễn Ngọc Minh Anh[m
+[32m+[m[32m- **MSSV:** TS02678[m
+[32m+[m[32m- **Môn học:** SOF309 - Kiểm thử phần mềm với AI[m
+ [m
+ ---[m
+ [m
+ ## 1. MỤC TIÊU KIỂM THỬ[m
+[31m-* Kiểm thử logic backend (Unit Test với JUnit 5 cho Controller).[m
+[31m-* Kiểm thử giao diện tự động (Automation UI Test với Selenium WebDriver).[m
+[31m-* Tích hợp kiểm thử tự động với GitHub Actions CI/CD.[m
+[32m+[m
+[32m+[m[32mMục tiêu của quá trình kiểm thử là đánh giá chất lượng và tính chính xác của các chức năng trong website bán linh kiện máy tính.[m
+[32m+[m
+[32m+[m[32mCác mục tiêu cụ thể:[m
+[32m+[m
+[32m+[m[32m- Kiểm tra chức năng đăng ký, đăng nhập và đăng xuất tài khoản.[m
+[32m+[m[32m- Kiểm tra quá trình xác thực OTP và khôi phục mật khẩu.[m
+[32m+[m[32m- Kiểm tra phân quyền truy cập giữa khách hàng, nhân viên và quản trị viên.[m
+[32m+[m[32m- Kiểm tra chức năng tìm kiếm, lọc và xem chi tiết sản phẩm.[m
+[32m+[m[32m- Kiểm tra các thao tác giỏ hàng và đặt hàng.[m
+[32m+[m[32m- Kiểm tra chức năng quản lý sản phẩm và đơn hàng.[m
+[32m+[m[32m- Kiểm tra chức năng đánh giá sản phẩm.[m
+[32m+[m[32m- Phát hiện lỗi trong quá trình nhập dữ liệu và xử lý nghiệp vụ.[m
+[32m+[m[32m- Sử dụng AI hỗ trợ phân tích yêu cầu, xây dựng Test Plan và Test Case.[m
+ [m
+ ## 2. PHẠM VI KIỂM THỬ[m
+[31m-* **In-Scope:** Luồng Đăng ký, Đăng nhập, và thao tác CRUD trên giao diện.[m
+[31m-* **Out-of-Scope:** Kiểm thử hiệu năng (Performance Test), Bảo mật chuyên sâu.[m
+ [m
+[31m-## 3. TIÊU CHÍ HOÀN THÀNH[m
+[31m-* 100% test script thực thi pass.[m
+[31m-* Pipeline GitHub Actions báo xanh (Success).[m
+[32m+[m[32m### 2.1. In-Scope (Trong phạm vi kiểm thử)[m
+[32m+[m
+[32m+[m[32m**Nhóm chức năng tài khoản:**[m
+[32m+[m[32m- Đăng ký tài khoản.[m
+[32m+[m[32m- Đăng nhập và đăng xuất.[m
+[32m+[m[32m- Xác thực OTP khi đăng ký.[m
+[32m+[m[32m- Quên mật khẩu và đặt lại mật khẩu.[m
+[32m+[m
+[32m+[m[32m**Nhóm chức năng sản phẩm:**[m
+[32m+[m[32m- Hiển thị danh sách sản phẩm.[m
+[32m+[m[32m- Tìm kiếm sản phẩm theo tên.[m
+[32m+[m[32m- Lọc sản phẩm theo danh mục.[m
+[32m+[m[32m- Xem chi tiết sản phẩm.[m
+[32m+[m
+[32m+[m[32m**Nhóm chức năng mua hàng:**[m
+[32m+[m[32m- Thêm sản phẩm vào giỏ hàng.[m
+[32m+[m[32m- Cập nhật số lượng sản phẩm.[m
+[32m+[m[32m- Xóa sản phẩm khỏi giỏ hàng.[m
+[32m+[m[32m- Kiểm tra số lượng tồn kho.[m
+[32m+[m[32m- Áp dụng khuyến mãi khi thanh toán.[m
+[32m+[m[32m- Tạo đơn hàng và kiểm tra thông tin đơn hàng.[m
+[32m+[m
+[32m+[m[32m**Nhóm chức năng đánh giá:**[m
+[32m+[m[32m- Hiển thị đánh giá sản phẩm.[m
+[32m+[m[32m- Gửi đánh giá sản phẩm.[m
+[32m+[m[32m- Kiểm tra điều kiện khách hàng đã mua và nhận hàng.[m
+[32m+[m[32m- Kiểm tra cập nhật đánh giá đã tồn tại.[m
+[32m+[m
+[32m+[m[32m**Nhóm chức năng quản trị và nhân viên:**[m
+[32m+[m[32m- Quản lý sản phẩm.[m
+[32m+[m[32m- Quản lý khách hàng và nhân viên.[m
+[32m+[m[32m- Quản lý khuyến mãi.[m
+[32m+[m[32m- Quản lý đơn hàng và trạng thái đơn hàng.[m
+[32m+[m[32m- Kiểm tra quyền truy cập các trang quản trị.[m
+[32m+[m
+[32m+[m[32m### 2.2. Out-of-Scope (Ngoài phạm vi kiểm thử)[m
+[32m+[m
+[32m+[m[32m- Kiểm thử tải với số lượng lớn người dùng đồng thời.[m
+[32m+[m[32m- Kiểm thử hiệu năng chuyên sâu (Performance Testing).[m
+[32m+[m[32m- Kiểm thử bảo mật chuyên sâu (Security Testing).[m
+[32m+[m[32m- Kiểm thử tích hợp với các dịch vụ bên thứ ba chưa được xác nhận.[m
+[32m+[m[32m- Kiểm thử trên nhiều hệ điều hành và thiết bị khác nhau.[m
+[32m+[m
+[32m+[m[32m## 3. CHIẾN LƯỢC KIỂM THỬ (TEST STRATEGY)[m
+[32m+[m
+[32m+[m[32m### 3.1. Kiểm thử chức năng (Functional Testing)[m
+[32m+[m
+[32m+[m[32m- Kiểm tra chức năng theo yêu cầu nghiệp vụ.[m
+[32m+[m[32m- Kiểm tra dữ liệu đầu vào hợp lệ và không hợp lệ.[m
+[32m+[m[32m- Kiểm tra kết quả hiển thị sau mỗi thao tác.[m
+[32m+[m[32m- Kiểm tra dữ liệu được lưu và cập nhật trong cơ sở dữ liệu.[m
+[32m+[m
+[32m+[m[32m### 3.2. Kiểm thử giao diện (UI Testing)[m
+[32m+[m
+[32m+[m[32m- Kiểm tra các biểu mẫu đăng ký, đăng nhập và đặt hàng.[m
+[32m+[m[32m- Kiểm tra các nút chức năng và liên kết điều hướng.[m
+[32m+[m[32m- Kiểm tra thông báo lỗi khi nhập dữ liệu không hợp lệ.[m
+[32m+[m[32m- Kiểm tra khả năng hiển thị danh sách sản phẩm và thông tin đơn hàng.[m
+[32m+[m
+[32m+[m[32m### 3.3. Kiểm thử phân quyền (Access Control Testing)[m
+[32m+[m
+[32m+[m[32m- Khách chưa đăng nhập không được truy cập chức năng yêu cầu đăng nhập.[m
+[32m+[m[32m- Khách hàng không được truy cập khu vực quản trị.[m
+[32m+[m[32m- Nhân viên chỉ được truy cập các khu vực phù hợp với quyền được cấp.[m
+[32m+[m[32m- Quản trị viên có thể truy cập khu vực quản trị theo phân quyền hệ thống.[m
+[32m+[m
+[32m+[m[32m### 3.4. Phương pháp thực hiện[m
+[32m+[m
+[32m+[m[32m- Kiểm thử thủ công bằng cách thao tác trực tiếp trên trình duyệt.[m
+[32m+[m[32m- Kiểm tra dữ liệu và kết quả xử lý thông qua website và cơ sở dữ liệu.[m
+[32m+[m[32m- Sử dụng Selenium WebDriver để tự động hóa giao diện nếu được cấu hình trong môi trường kiểm thử.[m
+[32m+[m[32m- Sử dụng AI hỗ trợ phân tích yêu cầu và đề xuất các trường hợp kiểm thử.[m
+[32m+[m
+[32m+[m[32m### 3.5. Kỹ thuật thiết kế kiểm thử[m
+[32m+[m
+[32m+[m[32mDự án sử dụng 4 kỹ thuật thiết kế kiểm thử chính:[m
+[32m+[m
+[32m+[m[32m**3.5.1. Equivalence Partitioning (EP) - Phân vùng tương đương**[m
+[32m+[m
+[32m+[m[32mChia dữ liệu đầu vào thành các nhóm hợp lệ và không hợp lệ có cách xử lý tương tự nhau. Áp dụng cho đăng ký, đăng nhập, tìm kiếm sản phẩm và nhập số lượng.[m
+[32m+[m
+[32m+[m[32m**3.5.2. Boundary Value Analysis (BVA) - Phân tích giá trị biên**[m
+[32m+[m
+[32m+[m[32mKiểm tra các giá trị tại, gần và ngoài giới hạn dữ liệu đầu vào. Áp dụng cho độ dài thông tin, số lượng sản phẩm và số sao đánh giá.[m
+[32m+[m
+[32m+[m[32m**3.5.3. Decision Table Testing - Kiểm thử bảng quyết định**[m
+[32m+[m
+[32m+[m[32mKiểm tra các tổ hợp điều kiện và kết quả xử lý tương ứng. Áp dụng cho đăng nhập, áp dụng khuyến mãi, đặt hàng và đánh giá sản phẩm.[m
+[32m+[m
+[32m+[m[32m**3.5.4. State Transition Testing - Kiểm thử chuyển trạng thái**[m
+[32m+[m
+[32m+[m[32mKiểm tra sự thay đổi trạng thái khi người dùng thực hiện các thao tác. Áp dụng cho đăng nhập, xác minh OTP và trạng thái đơn hàng.[m
+[32m+[m[32m### 3.5. Kỹ thuật thiết kế kiểm thử[m
+[32m+[m
+[32m+[m[32mDự án sử dụng 4 kỹ thuật thiết kế kiểm thử chính:[m
+[32m+[m
+[32m+[m[32m**3.5.1. Equivalence Partitioning (EP) - Phân vùng tương đương**[m
+[32m+[m
+[32m+[m[32mChia dữ liệu đầu vào thành các nhóm hợp lệ và không hợp lệ có cách xử lý tương tự nhau. Áp dụng cho đăng ký, đăng nhập, tìm kiếm sản phẩm và nhập số lượng.[m
+[32m+[m
+[32m+[m[32m**3.5.2. Boundary Value Analysis (BVA) - Phân tích giá trị biên**[m
+[32m+[m
+[32m+[m[32mKiểm tra các giá trị tại, gần và ngoài giới hạn dữ liệu đầu vào. Áp dụng cho độ dài thông tin, số lượng sản phẩm và số sao đánh giá.[m
+[32m+[m
+[32m+[m[32m**3.5.3. Decision Table Testing - Kiểm thử bảng quyết định**[m
+[32m+[m
+[32m+[m[32mKiểm tra các tổ hợp điều kiện và kết quả xử lý tương ứng. Áp dụng cho đăng nhập, áp dụng khuyến mãi, đặt hàng và đánh giá sản phẩm.[m
+[32m+[m
+[32m+[m[32m**3.5.4. State Transition Testing - Kiểm thử chuyển trạng thái**[m
+[32m+[m
+[32m+[m[32mKiểm tra sự thay đổi trạng thái khi người dùng thực hiện các thao tác. Áp dụng cho đăng nhập, xác minh OTP và trạng thái đơn hàng.[m
+[32m+[m
+[32m+[m[32m## 4. MÔI TRƯỜNG KIỂM THỬ (TEST ENVIRONMENT)[m
+[32m+[m
+[32m+[m[32m| Thành phần | Môi trường |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| Hệ điều hành | Windows 11 |[m
+[32m+[m[32m| Ngôn ngữ lập trình | Java 25 |[m
+[32m+[m[32m| Backend | Java Servlet |[m
+[32m+[m[32m| Frontend | JSP, HTML, CSS, JavaScript |[m
+[32m+[m[32m| ORM | Hibernate 7 |[m
+[32m+[m[32m| Cơ sở dữ liệu | Microsoft SQL Server |[m
+[32m+[m[32m| Build Tool | Maven |[m
+[32m+[m[32m| Web Server | Apache Tomcat 10.1.61 |[m
+[32m+[m[32m| IDE | Visual Studio Code / IntelliJ IDEA |[m
+[32m+[m[32m| Trình duyệt | Google Chrome / Microsoft Edge |[m
+[32m+[m[32m| URL kiểm thử | http://localhost:8080/sof309-assignment-1.0-SNAPSHOT/ |[m
+[32m+[m
+[32m+[m[32m## 5. TIÊU CHÍ BẮT ĐẦU KIỂM THỬ (ENTRY CRITERIA)[m
+[32m+[m
+[32m+[m[32m- Website đã được triển khai và chạy trên Apache Tomcat.[m
+[32m+[m[32m- Cơ sở dữ liệu SQL Server đã được cấu hình và kết nối thành công.[m
+[32m+[m[32m- Các chức năng nằm trong phạm vi kiểm thử đã sẵn sàng.[m
+[32m+[m[32m- Có dữ liệu kiểm thử cần thiết cho từng chức năng.[m
+[32m+[m[32m- Tài khoản khách hàng, nhân viên và quản trị viên đã được chuẩn bị.[m
+[32m+[m
+[32m+[m[32m## 6. TIÊU CHÍ HOÀN THÀNH KIỂM THỬ (EXIT CRITERIA)[m
+[32m+[m
+[32m+[m[32m- Các Test Case trong phạm vi đã được thực hiện.[m
+[32m+[m[32m- Kết quả thực tế được ghi nhận đầy đủ.[m
+[32m+[m[32m- Các lỗi phát hiện được ghi nhận và phân loại.[m
+[32m+[m[32m- Không còn lỗi nghiêm trọng chưa được xử lý trước khi nghiệm thu.[m
+[32m+[m[32m- Các Test Case chưa thực hiện phải được đánh dấu Not Run.[m
+[32m+[m[32m- Kết quả kiểm thử được tổng hợp trong báo cáo.[m
+[32m+[m
+[32m+[m[32m## 7. RỦI RO VÀ GIẢI PHÁP[m
+[32m+[m
+[32m+[m[32m| Rủi ro | Giải pháp |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| Database không kết nối được | Kiểm tra cấu hình Hibernate và SQL Server |[m
+[32m+[m[32m| Dữ liệu kiểm thử không đầy đủ | Chuẩn bị tài khoản và dữ liệu mẫu |[m
+[32m+[m[32m| Email OTP không gửi được | Kiểm tra cấu hình email và kết nối mạng |[m
+[32m+[m[32m| Người dùng không đủ quyền truy cập | Chuẩn bị tài khoản theo từng vai trò |[m
+[32m+[m[32m| Website phát sinh lỗi khi chạy | Kiểm tra log Tomcat và log ứng dụng |[m
+[32m+[m[32m| Kết quả kiểm thử không ổn định | Sử dụng dữ liệu kiểm thử nhất quán |[m
+[32m+[m
+[32m+[m[32m## 8. KẾT QUẢ MONG ĐỢI[m
+[32m+[m
+[32m+[m[32m- Xác định được các lỗi trong chức năng của website.[m
+[32m+[m[32m- Đánh giá được mức độ đáp ứng yêu cầu nghiệp vụ.[m
+[32m+[m[32m- Đảm bảo các chức năng quan trọng hoạt động đúng theo thiết kế.[m
+[32m+[m[32m- Có bộ Test Case phục vụ kiểm thử và ghi nhận kết quả.[m
+[32m+[m[32m- Sử dụng AI hỗ trợ quá trình thiết kế và phân tích kiểm thử.[m
+\ No newline at end of file[m
